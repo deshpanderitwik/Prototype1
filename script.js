@@ -1,22 +1,30 @@
+var system;
 var systems = [];
 var value;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	system = new ParticleSystem(createVector(width/2, height/2));
+	
+  for (i=0, j=(width/9)/2; i < 9; i++, j = j + width/9) {
+    systems[i] = new ParticleSystem(createVector(j, height/2));
+    console.log(j);
+  }
 }
 
 function draw() {
   background(0);
-  system.addParticle();
-  system.run();
+  // system.addParticle();
+  // system.run();
+
+  for (i=0; i < systems.length; i++) {
+    systems[i].addParticle();
+    systems[i].run();
+  }
 
   if (keyIsPressed && key == 'a')
     value = 200;
   else
     value = height/2;
-
-  console.log(height/2);
 }
 
 var Particle = function(location) {
@@ -75,7 +83,7 @@ ParticleSystem.prototype.run = function() {
     var p = this.particles[i];
     p.run();
     if (p.isDead()) {
-      this.particles.splice(i, 1);
+      this.particles.splice(i, 20);
     }
   }
 };
