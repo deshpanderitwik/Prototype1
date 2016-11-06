@@ -1,20 +1,27 @@
-var particle;
-var system;
+var systems = [];
+var value;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	system = new ParticleSystem(createVector(width/2, 200));
+	system = new ParticleSystem(createVector(width/2, height/2));
 }
 
 function draw() {
-  //background(0);
+  background(0);
   system.addParticle();
   system.run();
+
+  if (keyIsPressed && key == 'a')
+    value = 200;
+  else
+    value = height/2;
+
+  console.log(height/2);
 }
 
 var Particle = function(location) {
 	this.location = location.copy();
-	this.velocity = createVector(random(-10, 10), random(-10, 0));
+	this.velocity = createVector(random(-1, 1), random(-1, 0));
 	this.acceleration = createVector(0,0);
   this.lifespan = 255.0;
 };
@@ -25,11 +32,12 @@ Particle.prototype.run = function() {
 };
 
 Particle.prototype.update = function() {
-	this.pointer = createVector(width/2, height);
-	
+
+	this.pointer = createVector(this.location.x, value);
+
 	this.direction = p5.Vector.sub(this.pointer, this.location);
 	this.direction.normalize();
-	this.direction.mult(0.05);
+	this.direction.mult(0.5);
 
 	this.acceleration = this.direction;
 
@@ -42,7 +50,7 @@ Particle.prototype.update = function() {
 Particle.prototype.display = function() {
   noStroke();
   fill(100, 200, this.lifespan, this.lifespan);
-	ellipse(this.location.x, this.location.y,this.lifespan,this.lifespan);
+	ellipse(this.location.x, this.location.y,10,10);
 };
 
 Particle.prototype.isDead = function(){
