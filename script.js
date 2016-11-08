@@ -1,8 +1,6 @@
 var systems = [];
-var hammer1X;
-var hammer1Y;
-var hammer2X;
-var hammer2Y;
+var moveX = [];
+var moveY = [];
 var c, cSharp;
 
 function setup() {
@@ -11,58 +9,43 @@ function setup() {
   for (i=0, j=(width/12)/2; i < 12; i++, j = j + width/12) {
     systems[i] = new ParticleSystem(createVector(j, height/2 + 200));
   }
-
-  console.log(systems[1].particles);
 }
 
 function draw() {
   background(0);
 
-  if (c == true) {
-    hammer1X = (width/12)/2;
-    hammer1Y = height/2 + 200;
-    fill(255);
-  } else {
-    hammer1X = 0;
-    hammer1Y = 0;
+  for (i=0, j=(width/12)/2; i < 12; i++, j = j + width/12) {
+    moveX[i] = j;
+    moveY[i] = height/2 + 200;
   }
 
-  if (cSharp == true) {
-    hammer2X = (width/12)/2 + width/12;
-    hammer2Y = height/2 + 200;
-    fill(255);
-  } else {
-    hammer2X = 0;
-    hammer2Y = 0;
-  }
-
-  for (i=0; i < systems.length; i++) {
+  for (i=0, j=(width/12)/2; i < systems.length; i++, j = j + width/12) {
     systems[i].addParticle();
-    systems[i].run();
+    systems[i].run(moveX[i], moveY[i]);
+
+    if(mouseIsPressed){
+      moveX[1] = width/2;
+      moveY[1] = height/2;
+    }
   }
 }
 
 // Particle
 var Particle = function(location) {
   this.location = location.copy();
-  this.velocity = createVector(random(-1, 1), random(-1, 0));
+  this.velocity = createVector(random(-2, 2), random(-2, 0));
   this.acceleration = createVector(0,0);
   this.lifespan = 255.0;
-  this.moveX;
-  this.moveY;
-  this.hit1 = false;
-  this.hit2 = false;
+  this.lifespanInvert = 0;
 };
 
-Particle.prototype.run = function() {
-  this.update();
+Particle.prototype.run = function(moveX, moveY) {
+  this.update(moveX, moveY);
   this.display();
-  this.checkCollision();
-  this.jump();
 };
 
-Particle.prototype.update = function() {
-  this.pointer = createVector(this.moveX, this.moveY);
+Particle.prototype.update = function(moveX, moveY) {
+  this.pointer = createVector(moveX, moveY)
   
   this.direction = p5.Vector.sub(this.pointer, this.location);
   this.direction.normalize();
@@ -74,27 +57,13 @@ Particle.prototype.update = function() {
   this.location.add(this.velocity);
 
   this.lifespan -= 2;
+  this.lifespanInvert += 2;
 };
-
-Particle.prototype.checkCollision = function() {
-  this.hit1 = collideCircleCircle(hammer1X, hammer1Y, 40, this.location.x, this.location.y, 10, 10);
-  this.hit2 = collideCircleCircle(hammer2X, hammer2Y, 40, this.location.x, this.location.y, 10, 10);
-};
-
-Particle.prototype.jump = function() {
-  if(this.hit1 == true || this.hit2 == true) {
-    this.moveX = width/2;
-    this.moveY = height/2;
-  } else {
-    this.moveX = this.location.x;
-    this.moveY = this.location.y;
-  }
-}
 
 Particle.prototype.display = function() {
   noStroke();
   fill(this.location.x/4, 200, this.lifespan, this.lifespan);
-  ellipse(this.location.x, this.location.y,20,20);
+  ellipse(this.location.x, this.location.y,this.lifespanInvert/6,this.lifespanInvert/6);
 };
 
 Particle.prototype.isDead = function(){
@@ -112,25 +81,17 @@ var ParticleSystem = function(location) {
 };
 
 ParticleSystem.prototype.addParticle = function() {
-  this.particles.push(new Particle(this.origin));
+  this.particles.push(new Particle(this.origin, this.pointer));
 };
 
-ParticleSystem.prototype.run = function() {
+ParticleSystem.prototype.run = function(moveX, moveY) {
   for (var i = this.particles.length-1; i >= 0; i--) {
     var p = this.particles[i];
-    p.run();
+    p.run(moveX, moveY);
     if (p.isDead()) {
-      this.particles.splice(i, 20);
+      this.particles.splice(i, 1);
     }
   }
-};
-
-// Collision Detection
-p5.prototype.collideCircleCircle = function (x, y,d, x2, y2, d2) {
-  if( dist(x,y,x2,y2) <= (d/2)+(d2/2) ){
-    return true;
-  }
-  return false;
 };
 
 // Keyboard Bindings
