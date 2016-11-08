@@ -1,28 +1,39 @@
 var systems = [];
-var hammerX;
-var hammerY;
+var hammer1X;
+var hammer1Y;
+var hammer2X;
+var hammer2Y;
+var c, cSharp;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   
-  for (i=0, j=(width/9)/2; i < 9; i++, j = j + width/9) {
+  for (i=0, j=(width/12)/2; i < 12; i++, j = j + width/12) {
     systems[i] = new ParticleSystem(createVector(j, height/2 + 200));
   }
+
+  console.log(systems[1].particles);
 }
 
 function draw() {
   background(0);
 
-  console.log(mouseX, mouseY);
-
-  if (keyIsPressed && key == 'a') {
-    hammerX = 67;
-    hammerY = 509;
+  if (c == true) {
+    hammer1X = (width/12)/2;
+    hammer1Y = height/2 + 200;
     fill(255);
-    ellipse(hammerX, hammerY, 40, 40);
   } else {
-    hammerX = 0;
-    hammerY = 0;
+    hammer1X = 0;
+    hammer1Y = 0;
+  }
+
+  if (cSharp == true) {
+    hammer2X = (width/12)/2 + width/12;
+    hammer2Y = height/2 + 200;
+    fill(255);
+  } else {
+    hammer2X = 0;
+    hammer2Y = 0;
   }
 
   for (i=0; i < systems.length; i++) {
@@ -39,7 +50,8 @@ var Particle = function(location) {
   this.lifespan = 255.0;
   this.moveX;
   this.moveY;
-  this.hit = false;
+  this.hit1 = false;
+  this.hit2 = false;
 };
 
 Particle.prototype.run = function() {
@@ -65,11 +77,12 @@ Particle.prototype.update = function() {
 };
 
 Particle.prototype.checkCollision = function() {
-  this.hit = collideCircleCircle(hammerX, hammerY, 40, this.location.x, this.location.y, 10, 10);
+  this.hit1 = collideCircleCircle(hammer1X, hammer1Y, 40, this.location.x, this.location.y, 10, 10);
+  this.hit2 = collideCircleCircle(hammer2X, hammer2Y, 40, this.location.x, this.location.y, 10, 10);
 };
 
 Particle.prototype.jump = function() {
-  if(this.hit == true) {
+  if(this.hit1 == true || this.hit2 == true) {
     this.moveX = width/2;
     this.moveY = height/2;
   } else {
@@ -119,3 +132,16 @@ p5.prototype.collideCircleCircle = function (x, y,d, x2, y2, d2) {
   }
   return false;
 };
+
+// Keyboard Bindings
+keyboardJS.bind('a', function(e) {
+  c = true;
+}, function(e) {
+  c = false;
+});
+
+keyboardJS.bind('w', function(e) {
+  cSharp = true;
+}, function(e) {
+  cSharp = false;
+});
