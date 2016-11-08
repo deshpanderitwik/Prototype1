@@ -38,7 +38,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(0,0,0);
 
   for (i=0, j=(width/12)/2; i < systems.length; i++, j = j + width/12) {
     moveX[i] = j;
@@ -51,43 +51,43 @@ function draw() {
     if(c == true){
       moveY[0] = height/2;
       osc1.freq(130.813);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(cSharp == true) {
       moveY[1] = height/2;
       osc1.freq(138.591);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(d == true) {
       moveY[2] = height/2;
       osc1.freq(146.832);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(dSharp == true) {
       moveY[3] = height/2;
       osc1.freq(155.563);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(noteE == true) {
       moveY[4] = height/2;
       osc1.freq(164.814);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(f == true) {
       moveY[5] = height/2;
       osc1.freq(174.614);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(g == true) {
       moveY[7] = height/2;
       osc1.freq(195.998);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
     };
 
     if(c == true && cSharp == true){
@@ -104,9 +104,9 @@ function draw() {
       bArray[1] = 60;
 
       osc1.freq(130.813);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
       osc2.freq(138.591);
-      osc2.amp(0.05, 0.05);
+      osc2.amp(0.5, 0.05);
     }
 
     if(cSharp == true && d == true){
@@ -123,28 +123,28 @@ function draw() {
       bArray[2] = 60;
 
       osc1.freq(138.591);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
       osc2.freq(146.832);
-      osc2.amp(0.05, 0.05);
+      osc2.amp(0.5, 0.05);
     }
 
     if(c == true && d == true){
       moveX[0] = 0;
       moveX[2] = width/12 * 3;
 
-      rArray[0] = 46;
-      rArray[2] = 46;
+      rArray[0] = 230;
+      rArray[2] = 230;
 
-      gArray[0] = 204;
-      gArray[2] = 204;
+      gArray[0] = 126;
+      gArray[2] = 126;
 
-      bArray[0] = 113;
-      bArray[2] = 113;
+      bArray[0] = 34;
+      bArray[2] = 34;
 
       osc1.freq(130.813);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
       osc2.freq(146.832);
-      osc2.amp(0.05, 0.05);
+      osc2.amp(0.5, 0.05);
     }
 
     if(noteE == true && f == true){
@@ -161,9 +161,9 @@ function draw() {
       bArray[5] = 60;
 
       osc1.freq(164.814);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
       osc2.freq(174.614);
-      osc2.amp(0.05, 0.05);
+      osc2.amp(0.5, 0.05);
     }
 
     if(c == true && g == true){
@@ -180,9 +180,9 @@ function draw() {
       bArray[7] = 113;
 
       osc1.freq(130.813);
-      osc1.amp(0.05, 0.05);
+      osc1.amp(0.5, 0.05);
       osc2.freq(195.998);
-      osc2.amp(0.05, 0.05);
+      osc2.amp(0.5, 0.05);
     }
 
     systems[i].addParticle();
