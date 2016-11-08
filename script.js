@@ -9,12 +9,26 @@ var bArray = [];
 
 var c, cSharp, d;
 
+var osc1, osc2;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   
   for (i=0, j=(width/12)/2; i < 12; i++, j = j + width/12) {
     systems[i] = new ParticleSystem(createVector(j, height/2 + 200));
   }
+
+  osc1 = new p5.Oscillator();
+  osc1.setType('square');
+  osc1.freq(240);
+  osc1.amp(0);
+  osc1.start();
+
+  osc2 = new p5.Oscillator();
+  osc2.setType('square');
+  osc2.freq(240);
+  osc2.amp(0);
+  osc2.start();
 }
 
 function draw() {
@@ -30,41 +44,87 @@ function draw() {
 
     if(c == true){
       moveY[0] = height/2;
+      osc1.freq(130.813);
+      osc1.amp(0.5, 0.05);
     }
 
     if(cSharp == true) {
       moveY[1] = height/2;
+      osc1.freq(138.591);
+      osc1.amp(0.5, 0.05);
     }
 
     if(d == true) {
       moveY[2] = height/2;
+      osc1.freq(146.832);
+      osc1.amp(0.5, 0.05);
     }
 
     if(c == true && cSharp == true){
       moveX[0] = - 200;
       moveX[1] = width/12 * 4;
+
       rArray[0] = 231;
       rArray[1] = 231;
+
       gArray[0] = 76;
       gArray[1] = 76;
+
       bArray[0] = 60;
       bArray[1] = 60;
+
+      osc1.freq(130.813);
+      osc1.amp(0.5, 0.05);
+      osc2.freq(138.591);
+      osc2.amp(0.5, 0.05);
+    }
+
+    if(cSharp == true && d == true){
+      moveX[1] = - 200;
+      moveX[2] = width/12 * 4;
+
+      rArray[1] = 231;
+      rArray[2] = 231;
+
+      gArray[1] = 76;
+      gArray[2] = 76;
+
+      bArray[1] = 60;
+      bArray[2] = 60;
+
+      osc1.freq(138.591);
+      osc1.amp(0.5, 0.05);
+      osc2.freq(146.832);
+      osc2.amp(0.5, 0.05);
     }
 
     if(c == true && d == true){
       moveX[0] = width/12 * 2;
       moveX[2] = width/12 * 2;
+
       rArray[0] = 46;
       rArray[2] = 46;
+
       gArray[0] = 204;
       gArray[2] = 204;
+
       bArray[0] = 113;
       bArray[2] = 113;
+
+      osc1.freq(130.813);
+      osc1.amp(0.5, 0.05);
+      osc2.freq(146.832);
+      osc2.amp(0.5, 0.05);
     }
 
     systems[i].addParticle();
     systems[i].run(moveX[i], moveY[i], rArray[i], gArray[i], bArray[i]);
   }
+}
+
+function keyReleased() {
+  osc1.amp(0, 0.05);
+  osc2.amp(0, 0.05);
 }
 
 // Particle
@@ -99,7 +159,7 @@ Particle.prototype.update = function(moveX, moveY) {
 
 Particle.prototype.display = function(rVal, gVal, bVal) {
   noStroke();
-  fill(rVal, gVal, bVal, this.lifespan);
+  fill(rVal - this.lifespan, gVal - this.lifespan/2, bVal + this.lifespan, this.lifespan);
   ellipse(this.location.x, this.location.y,this.lifespanInvert/6,this.lifespanInvert/6);
 };
 
